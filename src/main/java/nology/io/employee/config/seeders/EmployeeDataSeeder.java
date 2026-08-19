@@ -12,6 +12,7 @@ public class EmployeeDataSeeder implements CommandLineRunner {
 
     private final EmployeeRepository repo;
 
+
     public EmployeeDataSeeder(EmployeeRepository repo){
         this.repo = repo;
     }

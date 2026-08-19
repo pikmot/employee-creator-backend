@@ -5,48 +5,31 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import nology.io.employee.employee.ContractType;
 import nology.io.employee.employee.EmploymentStatus;
 
-public class CreateEmployeeRequest {
+public class UpdateEmployeeRequest {
 
-    //NotNull -> rejects null allows "" & " "
-    //NotBlank -> rejects null, "" & " "
-    
-    @NotBlank
+    @Pattern(regexp = ".*\\S.*", message = "firstName Cannot be Empty")
     private String firstName;
 
     private String middleName;
 
-    @NotBlank
+    @Pattern(regexp = ".*\\S.*", message = "lastName Cannot be Empty")
     private String lastName;
 
     @Email
-    @NotNull
     private String email;
 
-    @NotBlank
+    @Pattern(regexp = ".*\\S.*", message = "mobileNumber Cannot be Empty")
     private String mobileNumber;
 
-    @NotBlank
+    @Pattern(regexp = ".*\\S.*", message = "address Cannot be Empty")
     private String address;
     
-    //allows empty string for non Strings
-    @NotNull
     private ContractType contractType;
 
-    @NotNull
-    private EmploymentStatus employmentStatus;
-
-    @NotNull
-    private LocalDate startDate;
-
-    @NotNull
-    @Min(1)
-    @Max(168)
-    private Integer hoursPerWeek;
 
     public String getFirstName() {
         return firstName;
@@ -127,5 +110,14 @@ public class CreateEmployeeRequest {
     public void setHoursPerWeek(Integer hoursPerWeek) {
         this.hoursPerWeek = hoursPerWeek;
     }
+
+    private EmploymentStatus employmentStatus;
+
+
+    private LocalDate startDate;
+
+    @Min(1)
+    @Max(168)
+    private Integer hoursPerWeek;
     
 }

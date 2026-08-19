@@ -22,7 +22,7 @@ public class ModelMapperConfiguration {
             String source = ctx.getSource();
 
 
-            return source == null ? null : source.trim().replace("\\s+:", " ");
+            return source == null ? null : source.trim().replace("\\s+", " ");
         }, String.class, String.class);
 
         return mapper;
