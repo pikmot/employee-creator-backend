@@ -103,6 +103,14 @@ public class UpdateEmployeeRequest {
         this.startDate = startDate;
     }
 
+    public LocalDate getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(LocalDate finishDate) {
+        this.finishDate = finishDate;
+    }
+
     public Integer getHoursPerWeek() {
         return hoursPerWeek;
     }
@@ -113,8 +121,19 @@ public class UpdateEmployeeRequest {
 
     private EmploymentStatus employmentStatus;
 
-
     private LocalDate startDate;
+
+    private LocalDate finishDate;
+
+    public boolean isOnGoing() {
+        return onGoing;
+    }
+
+    public void setOnGoing(boolean onGoing) {
+        this.onGoing = onGoing;
+    }
+
+    private boolean onGoing;
 
     @Min(1)
     @Max(168)

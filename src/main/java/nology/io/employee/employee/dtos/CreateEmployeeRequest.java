@@ -43,6 +43,20 @@ public class CreateEmployeeRequest {
     @NotNull
     private LocalDate startDate;
 
+    //can be null since "" when pased into local date -> found bug
+    private LocalDate finishDate;
+    
+    @NotNull
+    private boolean onGoing;
+
+    public boolean isOnGoing() {
+        return onGoing;
+    }
+
+    public void setOnGoing(boolean onGoing) {
+        this.onGoing = onGoing;
+    }
+
     @NotNull
     @Min(1)
     @Max(168)
@@ -126,6 +140,14 @@ public class CreateEmployeeRequest {
 
     public void setHoursPerWeek(Integer hoursPerWeek) {
         this.hoursPerWeek = hoursPerWeek;
+    }
+
+    public LocalDate getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(LocalDate finishDate) {
+        this.finishDate = finishDate;
     }
     
 }

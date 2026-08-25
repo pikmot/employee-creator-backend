@@ -50,6 +50,28 @@ public class Employee {
     private LocalDate startDate;
 
     @Column
+    private LocalDate finishDate;
+
+    @Column
+    private boolean onGoing;
+
+    public boolean isOnGoing() {
+        return onGoing;
+    }
+
+    public void setOnGoing(boolean onGoing) {
+        this.onGoing = onGoing;
+    }
+
+    public LocalDate getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(LocalDate finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    @Column
     private Integer hoursPerWeek;
 
     public Employee() {
