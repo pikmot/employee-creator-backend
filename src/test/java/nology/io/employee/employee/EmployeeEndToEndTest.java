@@ -220,76 +220,117 @@ public class EmployeeEndToEndTest {
 
     // //patch with bad body
 
-    // @Test
-    // public void patchTask_InvalidBodyDto_BadRequest(){
+    @Test
+    public void patchEmployee_InvalidBodyDto_BadRequest(){
 
-    //     //arrange
+        //arrange
 
-    //     //need to have existint task with id
-    //     Task task1 = new Task();
-    //     task1.setTitle("Title 1");
-    //     task1.setDescription("Description 1");
-    //     task1.setStatus("START");
+        //need to have existint task with id
+        Employee employee1 = new Employee();
+        employee1.setFirstName("John");
+        employee1.setMiddleName("Michael");
+        employee1.setLastName("Smith");
+        employee1.setEmail("john.smith@example.com");
+        employee1.setMobileNumber("0412345678");
+        employee1.setAddress("123 Example St, Sydney");
+        employee1.setContractType(ContractType.PERMANENT);
+        employee1.setEmploymentStatus(EmploymentStatus.FULL_TIME);
+        employee1.setStartDate(LocalDate.of(2023, 1, 15));
+        employee1.setFinishDate(null);
+        employee1.setOnGoing(true);
+        employee1.setHoursPerWeek(38);
 
-    //     taskRepository.saveAndFlush(task1);
+        employeeRepository.saveAndFlush(employee1);
 
-    //     HashMap<String, String> data = new HashMap<>();
-    //     data.put("title", "");
+        HashMap<String, String> data = new HashMap<>();
+        data.put("firstName", "");
 
-    //     given().contentType(ContentType.JSON).body(data)
-    //             .when().patch("/tasks/" + task1.getId())
-    //             .then().log().body()
-    //             .statusCode(HttpStatus.BAD_REQUEST.value()); //caught springs error
+        given().contentType(ContentType.JSON).body(data)
+                .when().patch("/employees/" + employee1.getId())
+                .then().log().body()
+                .statusCode(HttpStatus.BAD_REQUEST.value()); //caught springs error
 
-    // }
+    }
 
-    // //patch with invalid id
+    @Test
+    public void patchEmployee_InvalidId_NotFound(){
 
-    // @Test
-    // public void patchTask_InvalidId_NotFound(){
+        //has task but can't find ID
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("firstName", "John");
+        data.put("middleName", "Michael");
+        data.put("lastName", "Smith");
+        data.put("email", "john.smith@example.com");
+        data.put("mobileNumber", "0412345678");
+        data.put("address", "123 Example St, Sydney");
+        data.put("contractType", "PERMANENT");
+        data.put("employmentStatus", "FULL_TIME");
+        data.put("startDate", "2023-01-15");
+        data.put("finishDate", null);
+        data.put("onGoing", true);
+        data.put("hoursPerWeek", 38);
 
-    //     //has task but can't find ID
-    //     HashMap<String, String> data = new HashMap<>();
-    //     data.put("title", "Title 1");
-    //     data.put("description", "Description 1");
-    //     data.put("status", "START");
+        given().contentType(ContentType.JSON).body(data)
+                .when().patch("employees/1")
+                .then().log().body()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .body("error", matchesPattern("Not Found"))
+                .body(matchesJsonSchemaInClasspath("schemas/api-error-schema.json"));
 
-    //     given().contentType(ContentType.JSON).body(data)
-    //             .when().patch("tasks/1")
-    //             .then().log().body()
-    //             .statusCode(HttpStatus.NOT_FOUND.value())
-    //             .body("error", matchesPattern("Not Found"))
-    //             .body(matchesJsonSchemaInClasspath("schemas/api-error-schema.json"));
+    }
 
-    // }
+    @Test
+    public void patchEmployee_ValidIdBody_Success(){
 
-    // //sucess patch
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("firstName", "John");
+        data.put("middleName", "Michael");
+        data.put("lastName", "Smith");
+        data.put("email", "john.smith@example.com");
+        data.put("mobileNumber", "0412345678");
+        data.put("address", "123 Example St, Sydney");
+        data.put("contractType", "PERMANENT");
+        data.put("employmentStatus", "FULL_TIME");
+        data.put("startDate", "2023-01-15");
+        data.put("finishDate", null);
+        data.put("onGoing", true);
+        data.put("hoursPerWeek", 38);
 
-    // @Test
-    // public void patchTask_ValidIdBody_Success(){
+        Employee employee1 = new Employee();
+        employee1.setFirstName("John");
+        employee1.setMiddleName("Michael");
+        employee1.setLastName("Smith");
+        employee1.setEmail("john.smith@example.com");
+        employee1.setMobileNumber("0412345678");
+        employee1.setAddress("123 Example St, Sydney");
+        employee1.setContractType(ContractType.PERMANENT);
+        employee1.setEmploymentStatus(EmploymentStatus.FULL_TIME);
+        employee1.setStartDate(LocalDate.of(2023, 1, 15));
+        employee1.setFinishDate(null);
+        employee1.setOnGoing(true);
+        employee1.setHoursPerWeek(38);
 
-    //     HashMap<String, String> data = new HashMap<>();
-    //     data.put("title", "Title NEW");
-    //     data.put("description", "Description NEW");
-    //     data.put("status", "FINISHED");
+        employeeRepository.saveAndFlush(employee1);
 
-    //     Task task1 = new Task();
-    //     task1.setTitle("Title 1");
-    //     task1.setDescription("Description 1");
-    //     task1.setStatus("START");
+        given().contentType(ContentType.JSON).body(data)
+                .when().patch("employees/" + employee1.getId())
+                .then().log().body()
+                .statusCode(HttpStatus.OK.value())
+                .body("firstName", matchesPattern("John"))
+                .body("middleName", matchesPattern("Michael"))
+                .body("lastName", matchesPattern("Smith"))
+                .body("email", matchesPattern("john.smith@example.com"))
+                .body("mobileNumber", matchesPattern("0412345678"))
+                .body("address", matchesPattern("123 Example St, Sydney"))
+                .body("contractType", matchesPattern("PERMANENT"))
+                .body("employmentStatus", matchesPattern("FULL_TIME"))
+                .body("startDate", matchesPattern("2023-01-15"))
+                .body("finishDate", nullValue())
+                .body("onGoing", equalTo(true))
+                .body("hoursPerWeek", equalTo(38))
+                .body(matchesJsonSchemaInClasspath("schemas/employee-schema.json"));
 
-    //     taskRepository.saveAndFlush(task1);
-
-    //     given().contentType(ContentType.JSON).body(data)
-    //             .when().patch("tasks/" + task1.getId())
-    //             .then().log().body()
-    //             .statusCode(HttpStatus.OK.value())
-    //             .body("title", matchesPattern("Title NEW"))
-    //             .body("description", matchesPattern("Description NEW"))
-    //             .body("status", matchesPattern("FINISHED"))
-    //             .body(matchesJsonSchemaInClasspath("schemas/task-schema.json"));
-
-    // }
+    }
     
     // //delete fail
     // @Test
