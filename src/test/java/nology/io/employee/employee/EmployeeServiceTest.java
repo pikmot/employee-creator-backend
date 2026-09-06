@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import nology.io.employee.employee.dtos.CreateEmployeeRequest;
+import nology.io.employee.employee.dtos.UpdateEmployeeRequest;
 import nology.io.employee.employee.entities.Employee;
 
 @ExtendWith(MockitoExtension.class)
@@ -169,41 +170,39 @@ public class EmployeeServiceTest {
         assertFalse(result);
     }
 
-    // @Test
-    // public void updateTaskById_whenTaskDoesNotExist_DoesNotSaveBook(){
-    //     //arrange
-    //     when(this.repo.findById(anyLong())).thenReturn(Optional.empty());
-    //     UpdateTaskRequest dto = new UpdateTaskRequest();
+    @Test
+    public void updateEmployeeById_whenEmployeeDoesNotExist_DoesNotSaveBook(){
 
-    //     //act
-    //     this.taskService.updateById(1L,dto);
+        when(this.repo.findById(anyLong())).thenReturn(Optional.empty());
+        UpdateEmployeeRequest dto = new UpdateEmployeeRequest();
 
-    //     //assert
-    //     // verify(this.taskService.findById(1L));
-    //     verify(this.mapper, never()).map(dto,new Task());
-    //     verify(this.repo, never()).saveAndFlush(any(Task.class));
-    // }
+        //act
+        this.employeeService.updateById(1L,dto);
 
-    // @Test
-    // public void updateTaskById_whenTaskDoesExist_SavesBook(){
+        verify(this.mapper, never()).map(dto,new Employee());
+        verify(this.repo, never()).saveAndFlush(any(Employee.class));
+    }
 
-    //     //arrange
-    //     UpdateTaskRequest dto = new UpdateTaskRequest();
-    //     dto.setTitle("Title 1");
+    @Test
+    public void updateEmployeeById_whenEmployeeDoesExist_SavesBook(){
+
+        //arrange
+        UpdateEmployeeRequest dto = new UpdateEmployeeRequest();
+        dto.setFirstName("John");
 
 
-    //     Task fakeTask = new Task();
-    //     fakeTask.setTitle("Title 1");
+        Employee fakEmployee = new Employee();
+        fakEmployee.setFirstName("John");
 
-    //     when(this.repo.findById(1L)).thenReturn(Optional.of(fakeTask));
+        when(this.repo.findById(1L)).thenReturn(Optional.of(fakEmployee));
 
-    //     //act
-    //     Optional<Task> result = this.taskService.updateById(1L, dto);
+        //act
+        Optional<Employee> result = this.employeeService.updateById(1L, dto);
 
-    //     assertTrue(result.isPresent());
-    //     verify(this.mapper).map(dto,fakeTask);
-    //     verify(this.repo).saveAndFlush(fakeTask);
+        assertTrue(result.isPresent());
+        verify(this.mapper).map(dto,fakEmployee);
+        verify(this.repo).saveAndFlush(fakEmployee);
 
-    // }
+    }
     
 }
