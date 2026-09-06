@@ -1,13 +1,16 @@
 package nology.io.employee.employee;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import nology.io.employee.common.exceptions.BadRequestException;
 import org.junit.jupiter.api.Test;
@@ -124,5 +127,83 @@ public class EmployeeServiceTest {
         verify(this.repo, never()).saveAndFlush(fakeEmployee);
 
     }
+
+    @Test
+    public void delete_WhenEmployeeExists_DeletesFromDBReturnsTrue(){
+
+        Employee fakeEmployee = new Employee();
+        fakeEmployee.setFirstName("John");
+        fakeEmployee.setMiddleName("Michael");
+        fakeEmployee.setLastName("Smith");
+        fakeEmployee.setEmail("john.smith@example.com");
+        fakeEmployee.setMobileNumber("0412345678");
+        fakeEmployee.setAddress("123 Example St, Sydney");
+        fakeEmployee.setContractType(ContractType.PERMANENT);
+        fakeEmployee.setEmploymentStatus(EmploymentStatus.FULL_TIME);
+        fakeEmployee.setStartDate(LocalDate.of(2023, 1, 15));
+        fakeEmployee.setFinishDate(null);
+        fakeEmployee.setOnGoing(true);
+        fakeEmployee.setHoursPerWeek(38);
+
+        when(this.repo.findById(anyLong())).thenReturn(Optional.of(fakeEmployee));
+
+        //act
+        boolean result = this.employeeService.deleteById(1L);
+
+        //assert
+        verify(this.employeeService).findById(1L);
+        verify(this.repo).delete(fakeEmployee);
+        assertTrue(result);
+
+    }
+
+    @Test
+    public void delete_WhenEmployeeDoesNotExist_DoesNotCallDeleteReturnsFalse(){
+
+        //act
+        boolean result = this.employeeService.deleteById(1L);
+
+        //assert
+        verify(this.employeeService).findById(1L);
+        verify(this.repo, never()).delete(any(Employee.class));
+        assertFalse(result);
+    }
+
+    // @Test
+    // public void updateTaskById_whenTaskDoesNotExist_DoesNotSaveBook(){
+    //     //arrange
+    //     when(this.repo.findById(anyLong())).thenReturn(Optional.empty());
+    //     UpdateTaskRequest dto = new UpdateTaskRequest();
+
+    //     //act
+    //     this.taskService.updateById(1L,dto);
+
+    //     //assert
+    //     // verify(this.taskService.findById(1L));
+    //     verify(this.mapper, never()).map(dto,new Task());
+    //     verify(this.repo, never()).saveAndFlush(any(Task.class));
+    // }
+
+    // @Test
+    // public void updateTaskById_whenTaskDoesExist_SavesBook(){
+
+    //     //arrange
+    //     UpdateTaskRequest dto = new UpdateTaskRequest();
+    //     dto.setTitle("Title 1");
+
+
+    //     Task fakeTask = new Task();
+    //     fakeTask.setTitle("Title 1");
+
+    //     when(this.repo.findById(1L)).thenReturn(Optional.of(fakeTask));
+
+    //     //act
+    //     Optional<Task> result = this.taskService.updateById(1L, dto);
+
+    //     assertTrue(result.isPresent());
+    //     verify(this.mapper).map(dto,fakeTask);
+    //     verify(this.repo).saveAndFlush(fakeTask);
+
+    // }
     
 }
