@@ -166,40 +166,57 @@ public class EmployeeEndToEndTest {
 
     }
 
-    // @Test
-    // public void createTask_InvalidDto_BadRequest(){
+    @Test
+    public void createEmployee_InvalidDto_BadRequest(){
 
-    //     HashMap<String, String> data = new HashMap<>();
-    //     data.put("title", "");
-
-
-    //     given().contentType(ContentType.JSON).body(data)
-    //             .when().post("/tasks")
-    //             .then().log().body()
-    //             .statusCode(HttpStatus.BAD_REQUEST.value()); //caught springs error
-
-    // }
-
-    // //creating task via DTO/ hash map
-    // @Test
-    // public void createTask_ValidDto_Created(){
-
-    //      HashMap<String, String> data = new HashMap<>();
-    //      data.put("title", "Title 1");
-    //      data.put("description", "Description 1");
-    //      data.put("status", "START");
-
-    //      given().contentType(ContentType.JSON).body(data)
-    //         .when().post("/tasks")
-    //         .then().log().body()
-    //         .statusCode(HttpStatus.CREATED.value())
-    //         .body("title", matchesPattern("Title 1"))
-    //         .body("description", matchesPattern("Description 1"))
-    //         .body("status", matchesPattern("START"))
-    //         .body(matchesJsonSchemaInClasspath("schemas/task-schema.json"));
+        HashMap<String, String> data = new HashMap<>();
+        data.put("firstName", "");
 
 
-    // }
+        given().contentType(ContentType.JSON).body(data)
+                .when().post("/employees")
+                .then().log().body()
+                .statusCode(HttpStatus.BAD_REQUEST.value()); //caught springs error
+
+    }
+
+    @Test
+    public void createEmployee_ValidDto_Created(){
+
+        //object to acocunt for everything
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("firstName", "John");
+        data.put("middleName", "Michael");
+        data.put("lastName", "Smith");
+        data.put("email", "john.smith@example.com");
+        data.put("mobileNumber", "0412345678");
+        data.put("address", "123 Example St, Sydney");
+        data.put("contractType", "PERMANENT");
+        data.put("employmentStatus", "FULL_TIME");
+        data.put("startDate", "2023-01-15");
+        data.put("finishDate", null);
+        data.put("onGoing", true);
+        data.put("hoursPerWeek", 38);
+
+         given().contentType(ContentType.JSON).body(data)
+            .when().post("/employees")
+            .then().log().body()
+            .statusCode(HttpStatus.CREATED.value())
+            .body("firstName", matchesPattern("John"))
+            .body("middleName", matchesPattern("Michael"))
+            .body("lastName", matchesPattern("Smith"))
+            .body("email", matchesPattern("john.smith@example.com"))
+            .body("mobileNumber", matchesPattern("0412345678"))
+            .body("address", matchesPattern("123 Example St, Sydney"))
+            .body("contractType", matchesPattern("PERMANENT"))
+            .body("employmentStatus", matchesPattern("FULL_TIME"))
+            .body("startDate", matchesPattern("2023-01-15"))
+            .body("finishDate", nullValue())
+            .body("onGoing", equalTo(true))
+            .body("hoursPerWeek", equalTo(38))
+            .body(matchesJsonSchemaInClasspath("schemas/employee-schema.json"));
+
+    }
 
     // //patch with bad body
 
