@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer" },
+    "firstName": { "type": "string" },
+    "middleName": { "type": "string" },
+    "lastName": { "type": "string" },
+    "email": { "type": "string" },
+    "mobileNumber": { "type": "string" },
+    "address": { "type": "string" },
+    "contractType": { "type": "string" },
+    "employmentStatus": { "type": "string" },
+    "startDate": { "type": "string", "format": "date" },
+    "finishDate": { "type": "string", "format": "date" },
+    "onGoing": { "type": "boolean" },
+    "hoursPerWeek": { "type": "integer" }
+  },
+  "required": [
+    "id",
+    "firstName",
+    "lastName",
+    "email",
+    "mobileNumber",
+    "address",
+    "contractType",
+    "employmentStatus",
+    "startDate",
+    "onGoing",
+    "hoursPerWeek"
+  ],
+  "additionalProperties": false
+}
