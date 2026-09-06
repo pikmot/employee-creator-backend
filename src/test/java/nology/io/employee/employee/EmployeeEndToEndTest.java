@@ -97,5 +97,218 @@ public class EmployeeEndToEndTest {
                 .body("hoursPerWeek", hasItems(38, 20))
                 .body(matchesJsonSchemaInClasspath("schemas/employee-list-schema.json"));
     }
+
+    @Test
+    public void getById_IdNotFond(){
+
+        //arrange
+        long id = 1L;
+
+        //testing body type
+        given().when().get("/employees/" + id)
+                .then().statusCode(HttpStatus.NOT_FOUND.value())
+                .body("message", matchesPattern("Can't Find Employee with ID 1"))
+                .body("error", matchesPattern("Not Found"))
+                .body(matchesJsonSchemaInClasspath("schemas/api-error-schema.json"));
+
+    }
+
+    @Test
+    public void getById_InvalidId_BadRequest(){
+        given().when().get("employees/test")
+                .then().log().body()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("error", matchesPattern("Bad Request"))
+                .body(matchesJsonSchemaInClasspath("schemas/api-error-schema.json"));
+
+    }
+
+    //suceed with id
+    @Test
+    public void getById_ValidForExistingEmployee_Success() {
+
+        //arrange
+        Employee employee1 = new Employee();
+        employee1.setFirstName("John");
+        employee1.setMiddleName("Michael");
+        employee1.setLastName("Smith");
+        employee1.setEmail("john.smith@example.com");
+        employee1.setMobileNumber("0412345678");
+        employee1.setAddress("123 Example St, Sydney");
+        employee1.setContractType(ContractType.PERMANENT);
+        employee1.setEmploymentStatus(EmploymentStatus.FULL_TIME);
+        employee1.setStartDate(LocalDate.of(2023, 1, 15));
+        employee1.setFinishDate(null);
+        employee1.setOnGoing(true);
+        employee1.setHoursPerWeek(38);
+        employeeRepository.saveAndFlush(employee1);
+
+        employeeRepository.saveAndFlush(employee1);
+
+        //act
+        given().when().get("employees/" + employee1.getId())
+                .then()
+                // .log().body()
+                .statusCode(HttpStatus.OK.value())
+                .body("firstName", matchesPattern(employee1.getFirstName()))
+                .body("middleName", matchesPattern(employee1.getMiddleName()))
+                .body("lastName", matchesPattern(employee1.getLastName()))
+                .body("email", matchesPattern(employee1.getEmail()))
+                .body("mobileNumber", matchesPattern(employee1.getMobileNumber()))
+                .body("address", matchesPattern(employee1.getAddress()))
+                .body("contractType", equalTo(employee1.getContractType().name()))
+                .body("employmentStatus", equalTo(employee1.getEmploymentStatus().name()))
+                .body("startDate", matchesPattern(employee1.getStartDate().toString()))
+                .body("finishDate", equalTo(null))
+                .body("onGoing", equalTo(employee1.isOnGoing()))
+                .body("hoursPerWeek", equalTo(employee1.getHoursPerWeek()))
+                .body(matchesJsonSchemaInClasspath("schemas/employee-schema.json"));
+
+    }
+
+    // @Test
+    // public void createTask_InvalidDto_BadRequest(){
+
+    //     HashMap<String, String> data = new HashMap<>();
+    //     data.put("title", "");
+
+
+    //     given().contentType(ContentType.JSON).body(data)
+    //             .when().post("/tasks")
+    //             .then().log().body()
+    //             .statusCode(HttpStatus.BAD_REQUEST.value()); //caught springs error
+
+    // }
+
+    // //creating task via DTO/ hash map
+    // @Test
+    // public void createTask_ValidDto_Created(){
+
+    //      HashMap<String, String> data = new HashMap<>();
+    //      data.put("title", "Title 1");
+    //      data.put("description", "Description 1");
+    //      data.put("status", "START");
+
+    //      given().contentType(ContentType.JSON).body(data)
+    //         .when().post("/tasks")
+    //         .then().log().body()
+    //         .statusCode(HttpStatus.CREATED.value())
+    //         .body("title", matchesPattern("Title 1"))
+    //         .body("description", matchesPattern("Description 1"))
+    //         .body("status", matchesPattern("START"))
+    //         .body(matchesJsonSchemaInClasspath("schemas/task-schema.json"));
+
+
+    // }
+
+    // //patch with bad body
+
+    // @Test
+    // public void patchTask_InvalidBodyDto_BadRequest(){
+
+    //     //arrange
+
+    //     //need to have existint task with id
+    //     Task task1 = new Task();
+    //     task1.setTitle("Title 1");
+    //     task1.setDescription("Description 1");
+    //     task1.setStatus("START");
+
+    //     taskRepository.saveAndFlush(task1);
+
+    //     HashMap<String, String> data = new HashMap<>();
+    //     data.put("title", "");
+
+    //     given().contentType(ContentType.JSON).body(data)
+    //             .when().patch("/tasks/" + task1.getId())
+    //             .then().log().body()
+    //             .statusCode(HttpStatus.BAD_REQUEST.value()); //caught springs error
+
+    // }
+
+    // //patch with invalid id
+
+    // @Test
+    // public void patchTask_InvalidId_NotFound(){
+
+    //     //has task but can't find ID
+    //     HashMap<String, String> data = new HashMap<>();
+    //     data.put("title", "Title 1");
+    //     data.put("description", "Description 1");
+    //     data.put("status", "START");
+
+    //     given().contentType(ContentType.JSON).body(data)
+    //             .when().patch("tasks/1")
+    //             .then().log().body()
+    //             .statusCode(HttpStatus.NOT_FOUND.value())
+    //             .body("error", matchesPattern("Not Found"))
+    //             .body(matchesJsonSchemaInClasspath("schemas/api-error-schema.json"));
+
+    // }
+
+    // //sucess patch
+
+    // @Test
+    // public void patchTask_ValidIdBody_Success(){
+
+    //     HashMap<String, String> data = new HashMap<>();
+    //     data.put("title", "Title NEW");
+    //     data.put("description", "Description NEW");
+    //     data.put("status", "FINISHED");
+
+    //     Task task1 = new Task();
+    //     task1.setTitle("Title 1");
+    //     task1.setDescription("Description 1");
+    //     task1.setStatus("START");
+
+    //     taskRepository.saveAndFlush(task1);
+
+    //     given().contentType(ContentType.JSON).body(data)
+    //             .when().patch("tasks/" + task1.getId())
+    //             .then().log().body()
+    //             .statusCode(HttpStatus.OK.value())
+    //             .body("title", matchesPattern("Title NEW"))
+    //             .body("description", matchesPattern("Description NEW"))
+    //             .body("status", matchesPattern("FINISHED"))
+    //             .body(matchesJsonSchemaInClasspath("schemas/task-schema.json"));
+
+    // }
+    
+    // //delete fail
+    // @Test
+    // public void deleteTask_invalidId_NotFound(){
+
+    //     //arrange
+    //     long id = 1L;
+
+    //     //testing body type
+    //     given().when().delete("/tasks/" + id)
+    //             .then().statusCode(HttpStatus.NOT_FOUND.value())
+    //             .body("message", matchesPattern("CAN'T FIND AND DELETE TASK THAT DOESN'T EXIST with ID " + id))
+    //             .body("error", matchesPattern("Not Found"))
+    //             .body(matchesJsonSchemaInClasspath("schemas/api-error-schema.json"));
+
+    // }
+
+    // //delete success
+    // @Test
+    // public void deleteTask_validId_Success(){
+
+    //     //arrange
+    //     Task task1 = new Task();
+    //     task1.setTitle("Title 1");
+    //     task1.setDescription("Description 1");
+    //     task1.setStatus("START");
+
+    //     taskRepository.saveAndFlush(task1);
+
+    //     //need to grab current task ID instead of setting 1 after flush -> sets ID after flush
+    //     long id = task1.getId();
+
+    //     //testing body type
+    //     given().when().delete("/tasks/" + id)
+    //             .then().statusCode(HttpStatus.NO_CONTENT.value());//no body for our case can't validate against schema
+
+    // }
     
 }
