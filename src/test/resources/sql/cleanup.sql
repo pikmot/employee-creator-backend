@@ -1,1 +1,1 @@
-DELETE FROM tasks;
+DELETE FROM employees;
