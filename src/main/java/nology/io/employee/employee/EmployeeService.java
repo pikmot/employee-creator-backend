@@ -29,7 +29,7 @@ public class EmployeeService {
 
     public Employee create(CreateEmployeeRequest data) {
 
-         if (data.getFirstName() == null || data.getFirstName().isBlank()) {
+        if (data.getFirstName() == null || data.getFirstName().isBlank()) {
         throw new BadRequestException("firstName cannot be blank");
         }
         if (data.getLastName() == null || data.getLastName().isBlank()) {
