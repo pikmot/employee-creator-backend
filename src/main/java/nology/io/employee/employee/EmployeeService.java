@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import nology.io.employee.common.exceptions.BadRequestException;
 import nology.io.employee.employee.dtos.CreateEmployeeRequest;
 import nology.io.employee.employee.dtos.UpdateEmployeeRequest;
 import nology.io.employee.employee.entities.Employee;
@@ -27,6 +28,35 @@ public class EmployeeService {
     }
 
     public Employee create(CreateEmployeeRequest data) {
+
+         if (data.getFirstName() == null || data.getFirstName().isBlank()) {
+        throw new BadRequestException("firstName cannot be blank");
+        }
+        if (data.getLastName() == null || data.getLastName().isBlank()) {
+            throw new BadRequestException("lastName cannot be blank");
+        }
+        if (data.getEmail() == null || data.getEmail().isBlank()) {
+            throw new BadRequestException("email cannot be blank");
+        }
+        if (data.getMobileNumber() == null || data.getMobileNumber().isBlank()) {
+            throw new BadRequestException("mobileNumber cannot be blank");
+        }
+        if (data.getAddress() == null || data.getAddress().isBlank()) {
+            throw new BadRequestException("address cannot be blank");
+        }
+        if (data.getContractType() == null) {
+            throw new BadRequestException("contractType is required");
+        }
+        if (data.getEmploymentStatus() == null) {
+            throw new BadRequestException("employmentStatus is required");
+        }
+        if (data.getStartDate() == null) {
+            throw new BadRequestException("startDate is required");
+        }
+        if (data.getHoursPerWeek() == null || data.getHoursPerWeek() < 1 || data.getHoursPerWeek() > 168) {
+            throw new BadRequestException("hoursPerWeek must be between 1 and 168");
+        }
+
 
         Employee createdEmployee = this.mapper.map(data, Employee.class);
         this.repo.saveAndFlush(createdEmployee);
