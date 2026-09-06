@@ -332,41 +332,48 @@ public class EmployeeEndToEndTest {
 
     }
     
-    // //delete fail
-    // @Test
-    // public void deleteTask_invalidId_NotFound(){
+    @Test
+    public void deleteEmployee_invalidId_NotFound(){
 
-    //     //arrange
-    //     long id = 1L;
+        //arrange
+        long id = 1L;
 
-    //     //testing body type
-    //     given().when().delete("/tasks/" + id)
-    //             .then().statusCode(HttpStatus.NOT_FOUND.value())
-    //             .body("message", matchesPattern("CAN'T FIND AND DELETE TASK THAT DOESN'T EXIST with ID " + id))
-    //             .body("error", matchesPattern("Not Found"))
-    //             .body(matchesJsonSchemaInClasspath("schemas/api-error-schema.json"));
+        //testing body type
+        given().when().delete("/employees/" + id)
+                .then().statusCode(HttpStatus.NOT_FOUND.value())
+                .body("message", matchesPattern("Can't Find and Delete Employee with ID " + id))
+                .body("error", matchesPattern("Not Found"))
+                .body(matchesJsonSchemaInClasspath("schemas/api-error-schema.json"));
 
-    // }
+    }
 
-    // //delete success
-    // @Test
-    // public void deleteTask_validId_Success(){
+    @Test
+    public void deleteEmployee_validId_Success(){
 
-    //     //arrange
-    //     Task task1 = new Task();
-    //     task1.setTitle("Title 1");
-    //     task1.setDescription("Description 1");
-    //     task1.setStatus("START");
+        //arrange
+        Employee employee1 = new Employee();
+        employee1.setFirstName("John");
+        employee1.setMiddleName("Michael");
+        employee1.setLastName("Smith");
+        employee1.setEmail("john.smith@example.com");
+        employee1.setMobileNumber("0412345678");
+        employee1.setAddress("123 Example St, Sydney");
+        employee1.setContractType(ContractType.PERMANENT);
+        employee1.setEmploymentStatus(EmploymentStatus.FULL_TIME);
+        employee1.setStartDate(LocalDate.of(2023, 1, 15));
+        employee1.setFinishDate(null);
+        employee1.setOnGoing(true);
+        employee1.setHoursPerWeek(38);
 
-    //     taskRepository.saveAndFlush(task1);
+        employeeRepository.saveAndFlush(employee1);
 
-    //     //need to grab current task ID instead of setting 1 after flush -> sets ID after flush
-    //     long id = task1.getId();
+        //need to grab current task ID instead of setting 1 after flush -> sets ID after flush
+        long id = employee1.getId();
 
-    //     //testing body type
-    //     given().when().delete("/tasks/" + id)
-    //             .then().statusCode(HttpStatus.NO_CONTENT.value());//no body for our case can't validate against schema
+        //testing body type
+        given().when().delete("/employees/" + id)
+                .then().statusCode(HttpStatus.NO_CONTENT.value());//no body for our case can't validate against schema
 
-    // }
+    }
     
 }
