@@ -54,7 +54,12 @@ public class EmployeesController {
 
         PageResponse<Employee> response = new PageResponse<>(employeePage.getNumber() +1, employeePage.getTotalPages(),employeePage.getTotalElements(), employeePage.getSize(), employeePage.hasNext() ? employeePage.getNumber() + 2 : null, employeePage.hasPrevious() ? employeePage.getNumber(): null, employeePage.getContent());
 
-        if (employeePage.getTotalPages() < params.getPage()){
+        if (employeePage.getTotalPages() == 0){
+
+            return ResponseEntity.ok(response);
+        }
+
+        if (employeePage.getTotalPages() < params.getPage() ){
 
 
             throw new UnprocessableContentException("Page Too High!");

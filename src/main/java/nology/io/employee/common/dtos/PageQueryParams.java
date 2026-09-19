@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min;
 public class PageQueryParams {
 
     @Min(1)
-    private Integer page = 0;
+    private Integer page = 1;
 
 
     @Min(1)
