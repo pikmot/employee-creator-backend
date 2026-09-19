@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import nology.io.employee.common.exceptions.BadRequestException;
@@ -23,8 +25,8 @@ public class EmployeeService {
         this.mapper = mapper;
     }
 
-    public List<Employee> findAll() {
-        return this.repo.findAll();
+    public Page<Employee> findAll(Pageable pageable) {
+        return this.repo.findAll(pageable);
     }
 
     public Employee create(CreateEmployeeRequest data) {
