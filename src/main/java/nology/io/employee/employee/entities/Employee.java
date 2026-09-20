@@ -55,22 +55,6 @@ public class Employee {
     @Column
     private boolean onGoing;
 
-    public boolean isOnGoing() {
-        return onGoing;
-    }
-
-    public void setOnGoing(boolean onGoing) {
-        this.onGoing = onGoing;
-    }
-
-    public LocalDate getFinishDate() {
-        return finishDate;
-    }
-
-    public void setFinishDate(LocalDate finishDate) {
-        this.finishDate = finishDate;
-    }
-
     @Column
     private Integer hoursPerWeek;
 
@@ -164,5 +148,20 @@ public class Employee {
     public void setHoursPerWeek(Integer hoursPerWeek) {
         this.hoursPerWeek = hoursPerWeek;
     }
-    
+
+    public boolean isOnGoing() {
+        return onGoing;
+    }
+
+    public void setOnGoing(boolean onGoing) {
+        this.onGoing = onGoing;
+    }
+
+    public LocalDate getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(LocalDate finishDate) {
+        this.finishDate = finishDate;
+    }
 }

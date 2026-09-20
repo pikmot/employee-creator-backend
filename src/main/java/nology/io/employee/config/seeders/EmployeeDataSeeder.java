@@ -68,6 +68,8 @@ public class EmployeeDataSeeder implements CommandLineRunner {
 
                 if (randomFinishDate == null){randomIsOnGoing = true;}
 
+                Integer randomHoursPerWeek = faker.number().numberBetween(1, 168);
+
                 Employee createdEmployee = new Employee();
 
                 createdEmployee.setFirstName(randomFirstName);
@@ -81,6 +83,7 @@ public class EmployeeDataSeeder implements CommandLineRunner {
                 createdEmployee.setStartDate(randomStartDate);
                 createdEmployee.setFinishDate(randomFinishDate);
                 createdEmployee.setOnGoing(randomIsOnGoing);
+                createdEmployee.setHoursPerWeek(randomHoursPerWeek);
 
                 employeeList.add(createdEmployee);
 
