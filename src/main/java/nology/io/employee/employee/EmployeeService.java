@@ -25,8 +25,8 @@ public class EmployeeService {
         this.mapper = mapper;
     }
 
-    public Page<Employee> findAll(Pageable pageable) {
-        return this.repo.findAll(pageable);
+    public Page<Employee> findAll(Pageable pageable, String searchTerm) {
+        return this.repo.findAll(pageable, searchTerm);
     }
 
     public Employee create(CreateEmployeeRequest data) {

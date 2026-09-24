@@ -13,9 +13,21 @@ public class PageQueryParams {
     @Max(20)
     private Integer size = 10;
 
+    private String searchTerm = "";
+
 
     public Integer getPage() {
         return page;
+    }
+
+
+    public String getSearchTerm() {
+        return searchTerm;
+    }
+
+
+    public void setSearchTerm(String searchTerm) {
+        this.searchTerm = searchTerm;
     }
 
 

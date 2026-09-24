@@ -16,7 +16,7 @@ public class PageResponse<T> {
     
 
     public PageResponse(int currentPage, int totalPages, long totalResults, int resultsPerPage, Integer nextPage,
-            Integer previousPage, List<T> data) {
+        Integer previousPage, List<T> data) {
         this.currentPage = currentPage;
         this.totalPages = totalPages;
         this.totalResults = totalResults;
