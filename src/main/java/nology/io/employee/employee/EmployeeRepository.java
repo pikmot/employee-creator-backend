@@ -10,6 +10,13 @@ import nology.io.employee.employee.entities.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee,Long>{
 
+    //no filter
     Page<Employee> findAll(Pageable pageable);
+
+    //query over first name
+    Page<Employee> findByFirstNameContainingIgnoreCase(String firstName, Pageable pageable);
     
-}
+    //query over first | middle | last name
+    Page<Employee> findByFirstNameContainingIgnoreCaseOrOrMiddleNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String middleName, String lastName, Pageable pageable);
+
+}   

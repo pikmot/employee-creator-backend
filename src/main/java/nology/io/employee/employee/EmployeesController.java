@@ -50,7 +50,7 @@ public class EmployeesController {
 
         PageRequest pageRequest = PageRequest.of(params.getPage()-1,params.getSize());
 
-        Page<Employee> employeePage = this.employeeService.findAll(pageRequest);
+        Page<Employee> employeePage = this.employeeService.findByFirstMiddleLastName(params.getSearchTerm(),pageRequest);
 
         PageResponse<Employee> response = new PageResponse<>(employeePage.getNumber() +1, employeePage.getTotalPages(),employeePage.getTotalElements(), employeePage.getSize(), employeePage.hasNext() ? employeePage.getNumber() + 2 : null, employeePage.hasPrevious() ? employeePage.getNumber(): null, employeePage.getContent());
 

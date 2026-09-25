@@ -25,8 +25,20 @@ public class EmployeeService {
         this.mapper = mapper;
     }
 
-    public Page<Employee> findAll(Pageable pageable, String searchTerm) {
-        return this.repo.findAll(pageable, searchTerm);
+    public Page<Employee> findAll(Pageable pageable) {
+        return this.repo.findAll(pageable);
+    }
+
+    public Page<Employee> findByFirstName(String searchTerm, Pageable pageable){
+
+        return this.repo.findByFirstNameContainingIgnoreCase(searchTerm, pageable);
+
+    }
+
+    public Page<Employee> findByFirstMiddleLastName(String searchTerm, Pageable pageable){
+
+        return this.repo.findByFirstNameContainingIgnoreCaseOrOrMiddleNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searchTerm, searchTerm, searchTerm, pageable);
+
     }
 
     public Employee create(CreateEmployeeRequest data) {
