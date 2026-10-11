@@ -174,8 +174,6 @@ Run the tests (no MySQL needed, they use H2):
 
 ## What did you struggle with?
 
-## What did you struggle with?
-
 - **The `onGoing` bug.** `finishDate` and `onGoing` went missing from responses because of how the boolean was named.
 - **My first tests.** Comparing enums, strings, booleans and numbers needed different matchers, and optional fields had to be nullable for tests to pass.
 - **Where validation runs.** `@Valid` works at the controller, so the service needed its own checks to be testable.
